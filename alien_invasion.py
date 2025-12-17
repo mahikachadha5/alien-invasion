@@ -8,6 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     """Class to manage game assets and behavior."""
@@ -38,6 +39,12 @@ class AlienInvasion:
         
         self._create_fleet()
 
+        self.sb = Scoreboard(self)
+
+        self.sb.prep_score()
+        self.sb.prep_high_score()
+        self.sb.show_score()
+
     def run_game(self):
         """Start the main loop for the game"""
         while True:
@@ -47,7 +54,8 @@ class AlienInvasion:
                 self._update_ship()
                 self._update_bullets()
                 self._update_aliens()
-                
+                self.sb.show_score()
+
             self._update_screen()
             self.clock.tick(60)
 
@@ -111,8 +119,11 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.ship.blitme()
         self.aliens.draw(self.screen)
-        
-        if not self.game_active: 
+        self.sb.prep_score()
+        self.sb.prep_high_score()
+        self.sb.show_score()
+
+        if not self.game_active:
             self.play_button.draw_button()
 
         pygame.display.flip()
@@ -137,6 +148,9 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         # check for bullets that have hit aliens, remove bullet and alien
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collisions:
+            for aliens_hit in collisions.values():
+                self.game_stats.score += 50 * len(aliens_hit)  # add points per alien
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
@@ -200,13 +214,15 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
-        
+            if self.game_stats.score > self.game_stats.high_score:
+                self.game_stats.high_score = self.game_stats.score
+
     def _check_aliens_bottom(self):
         for alien in self.aliens.sprites():
             if alien.rect.bottom >= self.settings.screen_height:
-                self._ship_hit()
+                self.game_active = False  # End the game
+                pygame.mouse.set_visible(True)  # Show the mouse cursor
                 break
-                
 
 
 if __name__ == "__main__":
