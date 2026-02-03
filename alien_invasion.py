@@ -24,7 +24,7 @@ class AlienInvasion:
 
         self.game_stats = GameStats(self)
 
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
 
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
