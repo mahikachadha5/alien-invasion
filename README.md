@@ -49,3 +49,5 @@ To shoot all alien ships before they take over your spaceship.
 - to move your spaceship, use the <kbd><--</kbd> and <kbd>--></kbd> arrow keys
 - to quit, press <kbd>q</kbd>
 - to shoot, press <kbd>spacebar</kbd>
+
+<img width="1450" height="825" alt="Screenshot 2026-02-02 at 7 35 41 PM" src="https://github.com/user-attachments/assets/ceee16a6-21ab-4927-a0e6-5148085d605b" />
